@@ -1,0 +1,20 @@
+name: Java CI with Gradle/Maven
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up JDK 26
+      uses: actions/setup-java@v4
+      with:
+        java-version: '26'
+        distribution: 'temurin'
+    # Gradle 프로젝트인 경우 아래 2줄 활성화
+    - name: Build with Gradle
+      run: ./gradlew bootJar || ./gradlew jar
+    - name: Upload JAR Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: program-jar
+        path: '**/build/libs/*.jar'
