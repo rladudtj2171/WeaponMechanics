@@ -1,5 +1,5 @@
 name: Java CI with Gradle/Maven
-on: [push]
+on: [push, workflow_dispatch]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -12,9 +12,11 @@ jobs:
         distribution: 'temurin'
     # Gradle 프로젝트인 경우 아래 2줄 활성화
     - name: Build with Gradle
-      run: ./gradlew bootJar || ./gradlew jar
+      run: |
+        chmod +x gradlew
+        ./gradlew shadowJar || ./gradlew assemble || ./gradlew build -x test
     - name: Upload JAR Artifact
       uses: actions/upload-artifact@v4
       with:
-        name: program-jar
+        name: WeaponMechanics-PR-Jars
         path: '**/build/libs/*.jar'
